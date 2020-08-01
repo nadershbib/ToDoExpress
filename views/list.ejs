@@ -1,0 +1,33 @@
+<%- include("header") -%>
+
+
+    <div class="box" id="heading">
+
+        <h1><%= TODAY  %></h1>
+
+
+    </div>
+
+    <div class="box">
+        <% for(var k=0;k<ITEMS.length;k++){ %>
+        <div class="item">
+            <input type="checkbox" />
+            <p><%=ITEMS[k]%></p>
+
+
+        </div>
+
+
+
+
+        <%}%>
+        <form class="item" action="/" method="POST">
+            <input type="text" name="input" placeholder="New Item" autocomplete="off" autofocus />
+            <button type="submit" name="buttonVal" value=<%=TODAY%>  >+</button>
+        </form>
+        
+    </div>
+
+
+
+    <%- include("footer") -%>
