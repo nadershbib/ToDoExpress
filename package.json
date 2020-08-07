@@ -1,6 +1,7 @@
 {
   "name": "todo-node",
   "version": "1.0.0",
+  "engines": {"node": "12.18.3"},
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
