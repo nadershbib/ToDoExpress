@@ -9,18 +9,18 @@
     </div>
 
     <div class="box">
-        <% for(var k=0;k<ITEMS.length;k++){ %>
-        <div class="item">
-            <input type="checkbox" />
-            <p><%=ITEMS[k]%></p>
-
-
-        </div>
-
-
-
-
-        <%}%>
+       <% ITEMS.forEach(item=>{ %>
+         <form action="/delete" method="POST">        
+            <div class="item">
+                <input type="checkbox" name="checkbox" value="<%=item._id %>"onChange="this.form.submit()" />
+                <p><%=item.name%></p>
+    
+    
+            </div>
+            <input type="hidden" name="listName" value="<%=TODAY%>"></input>
+          </form>   
+      <%  }); %>
+        
         <form class="item" action="/" method="POST">
             <input type="text" name="input" placeholder="New Item" autocomplete="off" autofocus />
             <button type="submit" name="buttonVal" value=<%=TODAY%>  >+</button>
