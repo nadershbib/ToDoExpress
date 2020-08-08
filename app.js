@@ -20,14 +20,14 @@ const mongoose = require("mongoose");
 const _ = require("lodash");
 
 async function mongo() {
-  const m = await mongoose.connect("mongodb+srv://nadershbib:test123@todolist.xr4pi.mongodb.net/todolistDB", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  var m = await mongoose.connect("mongodb+srv://nadershbib:test123@cluster0.xr4pi.mongodb.net/todolistDB?retryWrites=true&w=majority", 
+   {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify:false},()=>console.log("connected successfuly to ATLAS!"));
 }
 mongo()
   .then(console.log("Working just fine!"))
   .catch((err) => console.log("error is : " + err));
+
+
 
 const itemsSchema = new mongoose.Schema({
   name: String,
@@ -41,6 +41,14 @@ const listSchema = new mongoose.Schema({
 const List = new mongoose.model("List",listSchema);
 
 const Item = new mongoose.model("Item", itemsSchema);
+
+// Item.find({},(err,foundItemss)=>{
+//   if(err){
+//     console.log(err)
+//   }else{
+//     console.log(foundItemss)
+//   }
+// })
 
 const item1 = new Item({
   name: "Welcome to your to do list!",
@@ -57,7 +65,7 @@ const item3 = new Item({
 const defaultItems = [item1, item2, item3];
 
 app.get("/", (req, res) => {
-  let today = date.today();
+  let today = "TODAY";
   Item.find({}, (err, foundItems) => {
     if (foundItems.length === 0) {
       Item.insertMany(defaultItems, (err) => {
@@ -75,6 +83,7 @@ app.get("/", (req, res) => {
 });
 
 app.post("/", (req, res) => {
+
   if (req.body.input === "") {
     return "";
   }
@@ -86,18 +95,24 @@ app.post("/", (req, res) => {
     name:inputt
   });
 
-
-  if(listName===date.today()){
-
+console.log(req)
+  if(listName==="TODAY"){
+ 
   item.save();
 
   res.redirect("/");
 }else{
-  List.findOne({name:listName},(err,foundList)=>{
+  console.log(listName)
+  List.findOne({name:listName},function(err,foundList){
+    if(err){
+      console.log(err)
+    }else{
+    console.log(foundList);
     foundList.items.push(item);
     foundList.save();
     res.redirect("/"+listName);
-  })
+    }
+  });
 }
 });
 
